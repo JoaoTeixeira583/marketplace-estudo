@@ -1,9 +1,7 @@
 package br.com.estudo.marketplaceestudo.evento.infraestrutura;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import br.com.estudo.marketplaceestudo.evento.StatusEvento;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -22,10 +20,19 @@ public class EventoEntidade {
 
     @Column(nullable = false)
     private String nome;
+
     @Column(nullable = false)
     private String local;
+
     @Column(nullable = false)
     private int capacidade;
+
     @Column(nullable = false)
     private int ingressosVendidos;
+
+    // para gravar o enum StatusEvento na coluna status
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusEvento status;
+
 }

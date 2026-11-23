@@ -6,6 +6,7 @@ import br.com.estudo.marketplaceestudo.evento.EventoRepositorioDominio;
 import br.com.estudo.marketplaceestudo.evento.infraestrutura.EventoEntidade;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 // para conectar o repositorio do dominio para o repositorio do banco de dados que esta vinculado a JpaRepository
@@ -20,7 +21,7 @@ public class EventoRepositorioJpaAdaptador implements EventoRepositorioDominio {
 
     @Override
     public void salvar(Evento evento) {
-       EventoEntidade eventoEntidade = new EventoEntidade(evento.getId().id(), evento.getNome(), evento.getLocal(),evento.getCapacidade(),evento.getIngressosVendidos());
+       EventoEntidade eventoEntidade = new EventoEntidade(evento.getId().id(), evento.getNome(), evento.getLocal(),evento.getCapacidade(),evento.getIngressosVendidos(),evento.getStatus());
        eventoRepositorio.save(eventoEntidade);
     }
 
@@ -34,7 +35,28 @@ public class EventoRepositorioJpaAdaptador implements EventoRepositorioDominio {
                 entidade.getNome(),
                 entidade.getLocal(),
                 entidade.getCapacidade(),
-                entidade.getIngressosVendidos()
+                entidade.getIngressosVendidos(),
+                entidade.getStatus()
         ));
+    }
+
+    @Override
+    public List<Evento> listarEvento() {
+        var listaEvento = eventoRepositorio.findAll();
+        return listaEvento.stream()
+                .map(entidade -> new Evento(
+                        new EventoId(entidade.getId()),
+                        entidade.getNome(),
+                        entidade.getLocal(),
+                        entidade.getCapacidade(),
+                        entidade.getIngressosVendidos(),
+                        entidade.getStatus()
+                ))
+                .toList();
+    }
+
+    @Override
+    public void deletarEventoPorId(EventoId id) {
+        eventoRepositorio.deleteById(id.id());
     }
 }

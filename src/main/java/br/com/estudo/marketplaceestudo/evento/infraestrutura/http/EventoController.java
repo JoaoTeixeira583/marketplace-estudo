@@ -3,33 +3,30 @@ package br.com.estudo.marketplaceestudo.evento.infraestrutura.http;
 
 import br.com.estudo.marketplaceestudo.evento.Evento;
 import br.com.estudo.marketplaceestudo.evento.EventoId;
-import br.com.estudo.marketplaceestudo.evento.application.BuscarEventoPorIdUseCase;
-import br.com.estudo.marketplaceestudo.evento.application.CriarEventoUseCase;
-import br.com.estudo.marketplaceestudo.evento.application.VenderIngressoUseCase;
+import br.com.estudo.marketplaceestudo.evento.application.*;
 import br.com.estudo.marketplaceestudo.evento.infraestrutura.http.dto.CriarEventoRequisicao;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/eventos")
+@RequiredArgsConstructor
 public class EventoController {
 
     private final CriarEventoUseCase criarEventoUseCase;
     private final BuscarEventoPorIdUseCase buscarEventoPorIdUseCase;
     private final VenderIngressoUseCase venderIngressoUseCase;
+    private final ListarEventoUseCase listarEventoUseCase;
+    private final ExcluirEventoUseCase excluirEventoUseCase;
+    private final CancelarEventoUseCase cancelarEventoUseCase;
 
 
-    public EventoController(CriarEventoUseCase criarEventoUseCase,
-                            BuscarEventoPorIdUseCase buscarEventoPorIdUseCase,
-                            VenderIngressoUseCase venderIngressoUseCase) {
-        this.criarEventoUseCase = criarEventoUseCase;
-        this.buscarEventoPorIdUseCase = buscarEventoPorIdUseCase;
-        this.venderIngressoUseCase = venderIngressoUseCase;
-    }
 
     @PostMapping
     public ResponseEntity<EventoId> salvarEvento(@RequestBody CriarEventoRequisicao evento){
@@ -57,5 +54,33 @@ public class EventoController {
         }
 
         return ResponseEntity.ok(resultadoBusca.get());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Evento>> listarEvento(){
+        var listarEvento = listarEventoUseCase.executar();
+        return ResponseEntity.ok(listarEvento);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarEvento(@PathVariable UUID id){
+        var eventoExcluir = excluirEventoUseCase.executar(new EventoId(id));
+
+        if(eventoExcluir == false){
+           return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/cancelamento")
+    public ResponseEntity<Evento> cancelarEvento(@PathVariable UUID id){
+         var resultadoCancelamento = cancelarEventoUseCase.executar(new EventoId(id));
+
+         if(resultadoCancelamento.isEmpty()){
+             return ResponseEntity.notFound().build();
+         }
+
+         return ResponseEntity.ok(resultadoCancelamento.get());
     }
 }
