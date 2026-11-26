@@ -1,10 +1,12 @@
 package br.com.estudo.marketplaceestudo.cadastro.infraestrutura.repositorio;
 
 import br.com.estudo.marketplaceestudo.cadastro.Cliente;
+import br.com.estudo.marketplaceestudo.cadastro.ClienteId;
 import br.com.estudo.marketplaceestudo.cadastro.ClienteRepositorioDominio;
 import br.com.estudo.marketplaceestudo.cadastro.infraestrutura.ClienteEntidade;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -20,5 +22,18 @@ public class ClienteRepositorioJpaAdaptador implements ClienteRepositorioDominio
     public void salvar(Cliente cliente) {
         ClienteEntidade clienteEntidade = new ClienteEntidade(cliente.getId().id(),cliente.getNome(),cliente.getEmail());
         clienteRepositorio.save(clienteEntidade);
+    }
+
+    @Override
+    public Optional<Cliente> buscarClientePorId(ClienteId id) {
+         var resultadoBusca = clienteRepositorio.findById(id.id());
+
+         return resultadoBusca
+                 .map(cliente ->
+                         new Cliente(
+                                 new ClienteId(cliente.getId()),
+                                 cliente.getNome(),
+                                 cliente.getEmail()
+                         ));
     }
 }
