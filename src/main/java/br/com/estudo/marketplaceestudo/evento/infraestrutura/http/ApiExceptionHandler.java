@@ -1,7 +1,8 @@
 package br.com.estudo.marketplaceestudo.evento.infraestrutura.http;
 
-import br.com.estudo.marketplaceestudo.compra.application.ClienteNaoEncontradoException;
-import br.com.estudo.marketplaceestudo.compra.application.EventoNaoEncontradoException;
+import br.com.estudo.marketplaceestudo.cadastro.application.ClienteNaoEncontradoException;
+import br.com.estudo.marketplaceestudo.compra.application.CompraNaoEncontradaException;
+import br.com.estudo.marketplaceestudo.evento.application.EventoNaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,6 +33,11 @@ public class ApiExceptionHandler {
     // para tratar evento não encontrado
     @ExceptionHandler(EventoNaoEncontradoException.class)
     public ResponseEntity<String> tratarEventoNaoEncontrado(EventoNaoEncontradoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CompraNaoEncontradaException.class)
+    public ResponseEntity<String> tratarCompraNaoEncontrada(CompraNaoEncontradaException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

@@ -2,6 +2,8 @@ package br.com.estudo.marketplaceestudo.compra.infraestrutura.http;
 
 import br.com.estudo.marketplaceestudo.cadastro.ClienteId;
 import br.com.estudo.marketplaceestudo.compra.Compra;
+import br.com.estudo.marketplaceestudo.compra.CompraId;
+import br.com.estudo.marketplaceestudo.compra.application.CancelarCompraUseCase;
 import br.com.estudo.marketplaceestudo.compra.application.ComprarIngressoUseCase;
 import br.com.estudo.marketplaceestudo.compra.application.ListarComprasPorClienteUseCase;
 import br.com.estudo.marketplaceestudo.compra.infraestrutura.http.dto.ComprarIngressoRequisicao;
@@ -19,12 +21,15 @@ public class CompraController {
 
     private final ComprarIngressoUseCase comprarIngressoUseCase;
     private final ListarComprasPorClienteUseCase listarComprasPorClienteUseCase;
+    private final CancelarCompraUseCase cancelarCompraUseCase;
 
     public CompraController(ComprarIngressoUseCase  comprarIngressoUseCase,
-                            ListarComprasPorClienteUseCase listarComprasPorClienteUseCase
+                            ListarComprasPorClienteUseCase listarComprasPorClienteUseCase,
+                            CancelarCompraUseCase cancelarCompraUseCase
                             ) {
         this.comprarIngressoUseCase = comprarIngressoUseCase;
         this.listarComprasPorClienteUseCase = listarComprasPorClienteUseCase;
+        this.cancelarCompraUseCase = cancelarCompraUseCase;
     }
 
     @PostMapping
@@ -44,5 +49,13 @@ public class CompraController {
         var listarCliente = listarComprasPorClienteUseCase.executar(new ClienteId(id));
 
         return ResponseEntity.ok().body(listarCliente);
+    }
+
+    @PostMapping("/{id}/cancelamento")
+    public ResponseEntity<Compra> cancelarCompra(@PathVariable UUID id) {
+        var idCompra = new CompraId(id);
+        var compra = cancelarCompraUseCase.executar(idCompra);
+
+        return ResponseEntity.ok(compra);
     }
 }

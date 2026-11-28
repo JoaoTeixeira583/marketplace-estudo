@@ -1,4 +1,4 @@
-package br.com.estudo.marketplaceestudo.compra.application;
+package br.com.estudo.marketplaceestudo.evento.application;
 
 public class EventoNaoEncontradoException extends RuntimeException {
 

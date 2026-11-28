@@ -1,5 +1,6 @@
 package br.com.estudo.marketplaceestudo.compra.infraestrutura;
 
+import br.com.estudo.marketplaceestudo.compra.StatusCompra;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,8 @@ public class CompraEntidade {
 
     @Column(nullable = false)
     private UUID idEvento;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusCompra status;
 }

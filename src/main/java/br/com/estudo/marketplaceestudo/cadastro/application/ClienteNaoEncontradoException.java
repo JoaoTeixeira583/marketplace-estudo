@@ -1,4 +1,4 @@
-package br.com.estudo.marketplaceestudo.compra.application;
+package br.com.estudo.marketplaceestudo.cadastro.application;
 
 public class ClienteNaoEncontradoException extends RuntimeException{
 

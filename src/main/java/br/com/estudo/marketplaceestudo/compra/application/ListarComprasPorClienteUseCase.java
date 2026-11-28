@@ -2,6 +2,7 @@ package br.com.estudo.marketplaceestudo.compra.application;
 
 import br.com.estudo.marketplaceestudo.cadastro.ClienteId;
 import br.com.estudo.marketplaceestudo.cadastro.application.BuscarClientePorIdUseCase;
+import br.com.estudo.marketplaceestudo.cadastro.application.ClienteNaoEncontradoException;
 import br.com.estudo.marketplaceestudo.compra.Compra;
 import br.com.estudo.marketplaceestudo.compra.CompraRepositorioDominio;
 import org.springframework.stereotype.Service;

@@ -80,4 +80,13 @@ public class Evento {
     public void cancelar(){
         this.status = StatusEvento.CANCELADO;
     }
+
+    // metodo para devolver o ingresso
+    public void devolverIngresso(){
+        if(ingressosVendidos == 0){
+            throw new IllegalStateException("Não há ingresso vendido para devolver.");
+        }
+
+        ingressosVendidos -= 1;
+    }
 }
