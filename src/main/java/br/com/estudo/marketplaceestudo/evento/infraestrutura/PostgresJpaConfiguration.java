@@ -5,11 +5,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "br.com.estudo.marketplaceestudo.evento.infraestrutura.repositorio",
+        basePackages = {
+                "br.com.estudo.marketplaceestudo.evento.infraestrutura.repositorio",
+                "br.com.estudo.marketplaceestudo.compra.infraestrutura.repositorio"
+        },
         // como fabrica
         entityManagerFactoryRef = "entityManagerFactory",
         // como gerenciador de transações
         transactionManagerRef = "transactionManager"
 )
-public class EventoJpaConfiguration {
+public class PostgresJpaConfiguration {
 }
